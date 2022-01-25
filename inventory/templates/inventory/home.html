@@ -16,18 +16,11 @@
     />
 
     <link rel="stylesheet" href="{% static 'inventory/main.css' %}">
+    
+    <script href="{% static 'inventory/script1.js' %}"></script>
 
     <title>Inventory list</title>
 
-    <style>
-      table {
-        counter-reset: tableCount;
-      }
-      .counterCell:before {
-        content: counter(tableCount);
-        counter-increment: tableCount;
-      }
-    </style>
   </head>
 
   <body>
@@ -53,12 +46,30 @@
             </div> -->
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-              <a class="nav-item nav-link" href="#">Add New</a>
+              <a class="nav-item nav-link" href="#" id="add-new-btn">Add New</a>
             </div>
           </div>
         </div>
       </nav>
     </header>
+
+    <!-- Modal Section -->
+
+<div class="bg-modal">
+	<div class="modal-contents">
+
+		<div class="close">+</div>
+
+		<form action="">
+			<input type="text" placeholder="Product Name">
+			<input type="number" placeholder="Price">
+      <input type="number" placeholder="Quantity">
+			<a href="#" class="button">Submit</a>
+		</form>
+
+	</div>
+</div>
+
 
     <main role="main" class="container">
       <div class="row">
