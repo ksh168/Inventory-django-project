@@ -1,5 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+# from django.http import HttpResponse
+
+from .models import Product
+
 
 #dummy data
 items = [
@@ -21,7 +24,7 @@ items = [
 def home(request):
     #dictionary to put our data
     context = {
-        'items': items
+        'items': Product.objects.all()
     }
     return render(request, 'inventory/home.html', context)
 
