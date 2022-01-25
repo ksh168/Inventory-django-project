@@ -1,11 +1,29 @@
 from django.shortcuts import render
-
 from django.http import HttpResponse
 
-# Create your views here.
+#dummy data
+items = [
+    {
+        'product_name': 'Sanitizier',
+        'price': 50,
+        'quantity': 2,
+        'date_posted': 'Jan 25 2022'
+    },
+    {
+        'product_name': 'Cup',
+        'price': 30,
+        'quantity': 5,
+        'date_posted': 'Jan 25 2022'
+    }
+]
+
 
 def home(request):
-    return HttpResponse('<h1>Inventory home</h1>')
+    #dictionary to put our data
+    context = {
+        'items': items
+    }
+    return render(request, 'inventory/home.html', context)
 
 def about(request):
-    return HttpResponse('<h1>Inventory About</h1>')
+    return render(request, 'inventory/about.html', {'title': 'About'})
