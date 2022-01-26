@@ -3,6 +3,10 @@ from django.shortcuts import render
 
 from .models import Product
 
+from django.views.generic import ListView
+
+# from django.contrib import messages
+# from .forms import add_new_product_form
 
 #dummy data
 # items = [
@@ -30,3 +34,20 @@ def home(request):
 
 def about(request):
     return render(request, 'inventory/about.html', {'title': 'About'})
+
+
+# def add_new_product(request):
+#     if request.method == 'POST':
+#         form = add_new_product_form(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             product_name = form.cleaned_data.get('product_name')
+#             messages.success(request, f'Added product {product_name}!')
+    # else:
+    #     form = add_new_product_form()
+
+class ItemListView(ListView):
+    model = Product
+    template_name = 'inventory/home.html' #<app>/<model>_<viewtype>.html
+    context_object_name = 'items'   #changing variable name to let it know, we stored in 'items' variable
+    ordering = ['-date_posted'] #order from newest added to oldest
