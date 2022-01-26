@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from .models import Product
 
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 
 # from django.contrib import messages
 # from .forms import add_new_product_form
@@ -43,11 +43,19 @@ def about(request):
 #             form.save()
 #             product_name = form.cleaned_data.get('product_name')
 #             messages.success(request, f'Added product {product_name}!')
-    # else:
-    #     form = add_new_product_form()
+#     else:
+#         form = add_new_product_form()
+    
+    # return render(request, {'form':form})
 
 class ItemListView(ListView):
     model = Product
     template_name = 'inventory/home.html' #<app>/<model>_<viewtype>.html
     context_object_name = 'items'   #changing variable name to let it know, we stored in 'items' variable
     ordering = ['-date_posted'] #order from newest added to oldest
+
+
+# class ItemCreateView(CreateView):
+#     model = Product
+#     fields = ['product_name', 'price', 'quantity']
+#     # context['form'] = form

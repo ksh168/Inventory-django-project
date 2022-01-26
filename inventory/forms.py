@@ -1,10 +1,10 @@
 from django import forms
 from .models import Product
 
-class add_new_product_form():
-    product_name = forms.CharField()
-    price = forms.IntegerField()
-    quantity = forms.IntegerField()
+class add_new_product_form(forms.ModelForm):
+    # product_name = forms.CharField()
+    # price = forms.IntegerField()
+    # quantity = forms.IntegerField()
 
     class Meta:
         model = Product
