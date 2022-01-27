@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 # from django.http import HttpResponse
 
 from .models import Product
 
 from django.views.generic import ListView, CreateView
 
-# from django.contrib import messages
-# from .forms import add_new_product_form
+from django.contrib import messages
+from .forms import add_new_product_form
 
 #dummy data
 # items = [
@@ -36,17 +36,18 @@ def about(request):
     return render(request, 'inventory/about.html', {'title': 'About'})
 
 
-# def add_new_product(request):
-#     if request.method == 'POST':
-#         form = add_new_product_form(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             product_name = form.cleaned_data.get('product_name')
-#             messages.success(request, f'Added product {product_name}!')
-#     else:
-#         form = add_new_product_form()
+def add_new_product(request):
+    if request.method == 'POST':
+        form = add_new_product_form(request.POST)
+        if form.is_valid():
+            form.save()
+            product_name = form.cleaned_data.get('product_name')
+            messages.success(request, f'Added product {product_name}!')
+    else:
+        form = add_new_product_form()
     
-    # return render(request, {'form':form})
+    return redirect('inventory-home')
+    
 
 class ItemListView(ListView):
     model = Product

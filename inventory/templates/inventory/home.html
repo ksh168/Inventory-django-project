@@ -64,14 +64,15 @@
 			<!-- using + instead of x to make a proper close button -->
 			<div class="close">+</div>
 
-			<form action="" method="POST">
+			<form action="add_new_product/" method="POST">
 				{% csrf_token %}
 				<fieldset class="form-group">
 					<legend class="border-bottom mb-4">Add New Product!</legend>
-					<!-- <input type="text" placeholder="Product Name">
-					<input type="number" placeholder="Price">
-					<input type="number" placeholder="Quantity"> -->
-					{{ form }}
+					<input type="text" placeholder="Product Name" name="product_name">
+					<input type="number" placeholder="Price" name="price">
+					<input type="number" placeholder="Quantity" name="quantity">
+					<!-- {{ form }} -->
+					
 					<!-- {% for field in form %}
 					<div class="form-group{% if field.errors %} invalid{% endif %}">
 						<label for="{{ field.id_for_label }}">{{ field.label }}</label>
