@@ -40,14 +40,23 @@ def add_new_product(request):
     if request.method == 'POST':
         form = add_new_product_form(request.POST)
         if form.is_valid():
-            form.save()
+            form.save() #saves to db
             product_name = form.cleaned_data.get('product_name')
             messages.success(request, f'Added product {product_name}!')
+        
+        #input
+        #url = "http://localhost:9091/exact_api/csatRevamp/salesRole/" + input;
+
+        # form = add_new_product_form()
     else:
         form = add_new_product_form()
     
     return redirect('inventory-home')
-    
+    # context = {
+    #     'items': Product.objects.all()
+    # }
+    # return render(request, 'inventory/home.html', context)
+
 
 class ItemListView(ListView):
     model = Product

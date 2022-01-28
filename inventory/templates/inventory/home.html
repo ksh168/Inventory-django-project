@@ -14,6 +14,8 @@
 
 	<link rel="stylesheet" href="{% static 'inventory/main.css' %}">
 
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 	<title>Inventory list</title>
 
 </head>
@@ -27,15 +29,17 @@
 					aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="collapse navbar-collapse" id="navbarToggle">
+				<!-- <div class="collapse navbar-collapse" id="navbarToggle"> -->
 					<!-- <div class="navbar-nav mr-auto">
 						<a class="nav-item nav-link" href="#" id="add-new-btn">Add New</a>
 					</div> -->
 					<!-- Navbar Right Side -->
-					<div class="navbar-nav">
-						<a class="nav-item nav-link" href="#" id="add-new-btn">Add New</a>
-					</div>
-				</div>
+					<!-- <div class="navbar-nav"> -->
+						<!-- <a class="nav-item nav-link" href="#" id="add-new-btn">Add New</a> -->
+						
+					<!-- </div> -->
+				<!-- </div> -->
+				
 				<!-- <div class="search-container">
           <form action="/action_page.php">
             <input type="text" placeholder="Search.." name="search">
@@ -64,7 +68,7 @@
 			<!-- using + instead of x to make a proper close button -->
 			<div class="close">+</div>
 
-			<form action="add_new_product/" method="POST">
+			<form action="/add_new_product/" method="POST">
 				{% csrf_token %}
 				<fieldset class="form-group">
 					<legend class="border-bottom mb-4">Add New Product!</legend>
@@ -91,6 +95,9 @@
 
 
 	<main role="main" class="container">
+		<button id="add-new-btn" class="btn btn-primary" type="button" name="button">
+			<span class="fa fa-plus mr-2"></span>Add New
+		  </button>
 		<div class="row">
 			<div class="col-md-8">
 				{% if messages %}
@@ -107,21 +114,33 @@
 					<thead>
 						<tr>
 							<th>#</th>
-							<th scope="col">Product Name</th>
-							<th scope="col">Price</th>
-							<th scope="col">Quantity</th>
-							<th scope="col">Date Posted</th>
+							<th class="text-center" scope="col">Product Name</th>
+							<th class="text-center" scope="col">Price</th>
+							<th class="text-center" scope="col">Quantity</th>
+							<th class="text-center" scope="col">Date Posted</th>
+							<th class="text-center" scope="col">Update / Delete</th>
 						</tr>
 					</thead>
 
 					<tbody>
 						{% for item in items %}
 						<tr>
-							<th scope="row" class="counterCell"></th>
-							<td>{{ item.product_name }}</td>
-							<td>{{ item.price }}</td>
-							<td>{{ item.quantity }}</td>
-							<td>{{ item.date_posted }}</td>
+							<!-- <th scope="row" class="counterCell"></th> -->
+							<th class="text-center" scope="row">{{ forloop.counter }}</th>
+							<td class="text-center" >{{ item.product_name }}</td>
+							<td class="text-center" >{{ item.price }}</td>
+							<td class="text-center" >{{ item.quantity }}</td>
+							<td class="text-center" >{{ item.date_posted }}</td>
+							<td class="text-center">
+								<!-- Update button -->
+								<button type="button" class="btn btn-sm btn-primary">
+								  <span class="fa fa-pencil"></span>
+								</button>
+								<!-- Delete button -->
+								<button type="button" class="btn btn-sm btn-danger">
+								  <span class="fa fa-trash"></span>
+								</button>
+							  </td>
 						</tr>
 						{% endfor %}
 					</tbody>
