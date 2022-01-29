@@ -16,7 +16,7 @@
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+	
 	<title>Inventory list</title>
 
 </head>
@@ -31,16 +31,16 @@
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<!-- <div class="collapse navbar-collapse" id="navbarToggle"> -->
-				<!-- <div class="navbar-nav mr-auto">
+					<!-- <div class="navbar-nav mr-auto">
 						<a class="nav-item nav-link" href="#" id="add-new-btn">Add New</a>
 					</div> -->
-				<!-- Navbar Right Side -->
-				<!-- <div class="navbar-nav"> -->
-				<!-- <a class="nav-item nav-link" href="#" id="add-new-btn">Add New</a> -->
-
+					<!-- Navbar Right Side -->
+					<!-- <div class="navbar-nav"> -->
+						<!-- <a class="nav-item nav-link" href="#" id="add-new-btn">Add New</a> -->
+						
+					<!-- </div> -->
 				<!-- </div> -->
-				<!-- </div> -->
-
+				
 				<!-- <div class="search-container">
           <form action="/action_page.php">
             <input type="text" placeholder="Search.." name="search">
@@ -62,7 +62,6 @@
 		</button>
 	</div> -->
 
-
 	<!-- Modal Section -->
 	<div class="bg-modal" id="add-new-product">
 		<div class="modal-contents">
@@ -70,47 +69,34 @@
 			<!-- using + instead of x to make a proper close button -->
 			<div class="close" id="close1">+</div>
 
-			<!-- <form action="/api/inventory/" method="POST"> -->
-			{% csrf_token %}
-			<fieldset class="form-group">
-				<legend class="border-bottom mb-4">Add New Product!</legend>
-				<input type="text" placeholder="Product Name" name="product_name" id="product_name">
-				<input type="number" placeholder="Price" name="price" id="price">
-				<input type="number" placeholder="Quantity" name="quantity" id="quantity">
-				<!-- {{ form }} -->
-			</fieldset>
-			<button id="btnSubmit" class="btn btn-primary" type="submit">Submit</button>
-			<!-- </form> -->
+			<form action="/api/inventory/" method="POST">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					<legend class="border-bottom mb-4">Add New Product!</legend>
+					<input type="text" placeholder="Product Name" name="product_name">
+					<input type="number" placeholder="Price" name="price">
+					<input type="number" placeholder="Quantity" name="quantity">
+					<!-- {{ form }} -->
+					
+					<!-- {% for field in form %}
+					<div class="form-group{% if field.errors %} invalid{% endif %}">
+						<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+						{{ field }}
+						{% for error in field.errors %}
+						<p class="help-block">{{ error }}</p>
+						{% endfor %}
+					</div>
+					{% endfor %} -->
+				</fieldset>
+				<button class="btn btn-primary" type="submit">Submit</button>
+			</form>
 		</div>
 	</div>
-
-	<div class="bg-modal" id="update-product">
-		<div class="modal-contents">
-
-			<!-- using + instead of x to make a proper close button -->
-			<div class="close" id="close2">+</div>
-
-			<!-- <form action="/api/inventory/<id>" method="PUT"> -->
-			<!-- {% csrf_token %} -->
-			<fieldset class="form-group">
-				<legend class="border-bottom mb-4">Update Product!</legend>
-				<input type="text" placeholder="Product Name" name="product_name" id="product_name1">
-				<input type="number" placeholder="Price" name="price" id="price1">
-				<input type="number" placeholder="Quantity" name="quantity" id="quantity1">
-				<!-- {{ form }} -->
-			</fieldset>
-			<button id="update-btnSubmit" class="btn btn-primary" type="submit">Submit</button>
-			<!-- </form> -->
-		</div>
-	</div>
-
-
-
 
 	<main role="main" class="container">
 		<button id="add-new-btn" class="btn btn-primary" type="button" name="button">
 			<span class="fa fa-plus mr-2"></span>Add New
-		</button>
+		  </button>
 		<div class="row">
 			<div class="col-md-8">
 				{% if messages %}
@@ -134,7 +120,28 @@
 							<th class="text-center" scope="col">Update / Delete</th>
 						</tr>
 					</thead>
-					<tbody id="divBody">
+
+					<tbody>
+						{% for item in items %}
+						<tr>
+							<!-- <th scope="row" class="counterCell"></th> -->
+							<th class="text-center" scope="row">{{ forloop.counter }}</th>
+							<td class="text-center" >{{ item.product_name }}</td>
+							<td class="text-center" >{{ item.price }}</td>
+							<td class="text-center" >{{ item.quantity }}</td>
+							<td class="text-center" >{{ item.date_posted }}</td>
+							<td class="text-center">
+								<!-- Update button -->
+								<button type="button" class="btn btn-sm btn-primary" id="update-btn">
+								  <span class="fa fa-pencil"></span>
+								</button>
+								<!-- Delete button -->
+								<button type="button" class="btn btn-sm btn-danger" id="delete-btn">
+								  <span class="fa fa-trash"></span>
+								</button>
+							  </td>
+						</tr>
+						{% endfor %}
 					</tbody>
 				</table>
 			</div>

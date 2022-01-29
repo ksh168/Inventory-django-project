@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 # from django.http import HttpResponse
 
 from .models import Product
@@ -7,6 +7,19 @@ from django.views.generic import ListView, CreateView
 
 from django.contrib import messages
 from .forms import add_new_product_form
+
+
+
+
+from rest_framework import viewsets
+from .models import Product
+from .serializers import ProductSerializer
+
+
+   
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.views import APIView
+
 
 #dummy data
 # items = [
@@ -30,7 +43,10 @@ def home(request):
     context = {
         'items': Product.objects.all()
     }
+    # form = add_new_product_form()
+
     return render(request, 'inventory/home.html', context)
+    # return render(request, 'inventory/home.html', context, {'form': form})
 
 def about(request):
     return render(request, 'inventory/about.html', {'title': 'About'})
@@ -44,9 +60,6 @@ def add_new_product(request):
             product_name = form.cleaned_data.get('product_name')
             messages.success(request, f'Added product {product_name}!')
         
-        #input
-        #url = "http://localhost:9091/exact_api/csatRevamp/salesRole/" + input;
-
         # form = add_new_product_form()
     else:
         form = add_new_product_form()
@@ -69,3 +82,30 @@ class ItemListView(ListView):
 #     model = Product
 #     fields = ['product_name', 'price', 'quantity']
 #     # context['form'] = form
+
+
+
+#for rest_framework api
+class ProductView(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+
+#not getting used currently
+class ProfileDetail(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'profile_detail.html'
+
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        serializer = ProductSerializer(product)
+        return Response({'serializer': serializer, 'product': product})
+
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        serializer = ProductSerializer(product, data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer, 'product': product})
+        serializer.save()
+        return redirect('inventory-home')
+ 
