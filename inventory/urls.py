@@ -1,13 +1,16 @@
 from django.urls import path, include
 
-from .views import ItemListView
+from .views import (
+    ItemListView,
+    # PublisherDocumentView
+)
 
 from . import views
 
 from rest_framework import routers
 
 
-router = routers.DefaultRouter()    #inherit from rest_framework
+router = routers.DefaultRouter()  # inherit from rest_framework
 router.register('inventory', views.ProductView)
 
 

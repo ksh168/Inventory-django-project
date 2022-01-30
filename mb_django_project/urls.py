@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from inventory.views import *
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('inventory.urls')),
+    # path('search/', PublisherDocumentView.as_view({'get': 'list'})),#####
 ]

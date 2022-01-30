@@ -44,7 +44,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'bootstrap_modal_forms',
     'corsheaders',
+    # 'django_elasticsearch_dsl',
+    # 'django_elasticsearch_dsl_drf',
 ]
+
+# ELASTICSEARCH_DSL = {
+#     'default': {
+#         'hosts': 'localhost:9200'
+#     },
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,4 +137,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
