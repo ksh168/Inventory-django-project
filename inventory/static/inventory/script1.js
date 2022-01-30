@@ -151,19 +151,19 @@ function BindProducts() {
           "</td>" +
           //   console.log(test_variable[i]) +
 
-          //    console.log(new_object) +
+            //  console.log(new_object) +
 
-          "<td class='text-center'>\
-			<button type='button' class='btn btn-sm btn-primary' \
-			onclick='update_func(" +
-          new_object.id +
-          ")'><span class='fa fa-pencil'></span></button>\
-			<button type='button' class='btn btn-sm btn-danger' \
-			onclick='delete_confirmation_func(" +
-          result[i].id +
-          ")'><span class='fa fa-trash'></span></button>\
-		  </td>" +
-          "           </tr>";
+          `<td class='text-center'>
+			<button type='button' class='btn btn-sm btn-primary' 
+			onclick='update_func( 
+          ${new_object.id}
+          )'><span class='fa fa-pencil'></span></button>
+			<button type='button' class='btn btn-sm btn-danger'
+			onclick='delete_confirmation_func(
+          ${result[i].id}
+          )'><span class='fa fa-trash'></span></button>
+		  </td>"
+                     </tr>`;
       }
       $("#divBody").html(structureDiv);
     },
@@ -193,16 +193,21 @@ function DeleteRow(id) {
 }
 
 //to display update modal
+// function update_func(res_id, res_product_name, res_price, res_quantity) {
 function update_func(res) {
-  console.log("result", res);
+  // console.log("result", res);
+
+  console.log(res);
+
 
   document.querySelector("#update-product").style.display = "flex"; //to display popup
 
+  //pre-populate the form
   // $("#product_name1").val(res.product_name);
   // $("#price1").val(res.price);
   // $("#quantity1").val(res.quantity);
 
-  // console.log(res.id);
+  // console.log(res_id);
 
   // console.log(res);
 
