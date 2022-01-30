@@ -18,15 +18,18 @@ document.querySelector("#close1").addEventListener("click", function () {
 // 	console.log("delete-btn clicked");
 // });
 
-document.querySelector("#close2").addEventListener("click", function() {
-	document.querySelector("#update-product").style.display = "none";
-	console.log("close2 clicked");
+document.querySelector("#close2").addEventListener("click", function () {
+  document.querySelector("#update-product").style.display = "none";
+  console.log("close2 clicked");
 });
 
 //////////////////////////////////////////////////////////////////
 $(document).ready(function () {
   BindProducts();
 });
+
+
+//this code adds data in both sqlite3 and elasticsearch 
 
 $("#btnSubmit").click(function () {
   // let idValue = $('#txtId').val();
@@ -37,7 +40,12 @@ $("#btnSubmit").click(function () {
   $.ajax({
     type: "POST",
     dataType: "json",
-	// headers: {'X-CSRFToken': csrftoken},
+    // dataType: "jsonp",
+    // headers: {'X-CSRFToken': csrftoken},
+    // headers: {
+    //   "Access-Control-Allow-Origin": "*",
+    //   "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+    // },
     data: {
       product_name: product_name,
       price: price,
@@ -45,6 +53,8 @@ $("#btnSubmit").click(function () {
     },
 
     url: "http://localhost:8000/api/inventory/",
+    // url: "http://localhost:9200/company/doc/",
+
     error: function (xhr, status, error) {
       var err_msg = "";
       for (var prop in xhr.responseJSON) {
@@ -55,15 +65,45 @@ $("#btnSubmit").click(function () {
     },
     success: function (result) {
       BindProducts();
-      alert("Data Saved Successfully.");
+      // alert("Data Saved Successfully.");
 
       $("#product_name").val("");
       $("#price").val("");
       $("#quantity").val("");
     },
   });
-  document.querySelector("#add-new-product").style.display = "none";
 
+
+  //elasticsearch test-xhr [can also be done via ajax]
+  var data = JSON.stringify({
+    "product_name": product_name,
+    "price": price,
+    "quantity": quantity,
+  });
+
+  console.log("data_before_sending", data);
+
+  var xhr = new XMLHttpRequest();
+  // xhr.withCredentials = true;
+  var async = true;
+
+  console.log("xhr_req", xhr);
+
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === 4) {
+      console.log(this.responseText);
+    }
+  });
+
+  xhr.open("POST", "http://localhost:9200/company/doc/", async);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+  // xhr.setRequestHeader("Access-Control-Allow-Methods", "*");
+  // xhr.setRequestHeader("Access-Control-Allow-Headers", "*");
+
+  xhr.send(data);
+
+  document.querySelector("#add-new-product").style.display = "none";
 });
 
 function BindProducts() {
@@ -79,21 +119,20 @@ function BindProducts() {
       var totalCount = result.length;
       var structureDiv = "";
 
-	  let test_variable = result;
+      let test_variable = result;
 
-	  //to display latest added first
+      //to display latest added first
       for (let i = totalCount - 1; i >= 0; i--) {
+        var new_object = {
+          id: result[i].id,
+          product_name: result[i].product_name,
+          price: result[i].price,
+          quantity: result[i].quantity,
+        };
 
-		var new_object = { 
-			id: result[i].id,
-			product_name: result[i].product_name,
-			price: result[i].price,
-			quantity: result[i].quantity
-		 }
-        
-		// let test_variable = result[i];
-		
-		structureDiv +=
+        // let test_variable = result[i];
+
+        structureDiv +=
           "<tr>" +
           "	<th>" +
           result[i].id +
@@ -110,16 +149,19 @@ function BindProducts() {
           "              <td>" +
           result[i].date_posted +
           "</td>" +
+          //   console.log(test_variable[i]) +
 
-		//   console.log(test_variable[i]) +
-
-		//    console.log(new_object) +
+          //    console.log(new_object) +
 
           "<td class='text-center'>\
 			<button type='button' class='btn btn-sm btn-primary' \
-			onclick='update_func(" + new_object.id + ")'><span class='fa fa-pencil'></span></button>\
+			onclick='update_func(" +
+          new_object.id +
+          ")'><span class='fa fa-pencil'></span></button>\
 			<button type='button' class='btn btn-sm btn-danger' \
-			onclick='delete_confirmation_func(" + result[i].id + ")'><span class='fa fa-trash'></span></button>\
+			onclick='delete_confirmation_func(" +
+          result[i].id +
+          ")'><span class='fa fa-trash'></span></button>\
 		  </td>" +
           "           </tr>";
       }
@@ -150,68 +192,63 @@ function DeleteRow(id) {
   });
 }
 
-
-
-
-
 //to display update modal
 function update_func(res) {
-	console.log('result', res);
+  console.log("result", res);
 
-	document.querySelector("#update-product").style.display = "flex";//to display popup
-	
-	// $("#product_name1").val(res.product_name);
-	// $("#price1").val(res.price);
-	// $("#quantity1").val(res.quantity);
+  document.querySelector("#update-product").style.display = "flex"; //to display popup
 
-	// console.log(res.id);
+  // $("#product_name1").val(res.product_name);
+  // $("#price1").val(res.price);
+  // $("#quantity1").val(res.quantity);
 
-	// console.log(res);
+  // console.log(res.id);
 
-	let id_to_pass = res;
+  // console.log(res);
 
-	$("#update-btnSubmit").click(function () {
+  let id_to_pass = res;
 
-		console.log("update-btnSubmit clicked");
-		
-		console.log(id_to_pass);
+  $("#update-btnSubmit").click(function () {
+    console.log("update-btnSubmit clicked");
 
-		// let id = id;
-		let product_name = $("#product_name1").val();
-		let price = $("#price1").val();
-		let quantity = $("#quantity1").val();
-	
-		$.ajax({
-		type: "PUT",
-		dataType: "json",
-		// headers: {'X-CSRFToken': csrftoken},
+    console.log(id_to_pass);
 
-		data: {
-			product_name: product_name,
-			price: price,
-			quantity: quantity,
-		},
-	
-		url: "http://localhost:8000/api/inventory/"+ id_to_pass +"/",
-		error: function (xhr, status, error) {
-			var err_msg = "";
-			for (var prop in xhr.responseJSON) {
-			err_msg += prop + ": " + xhr.responseJSON[prop] + "\n";
-			}
-	
-			alert(err_msg);
-		},
-		success: function (result) {
-			BindProducts();
-			alert("Data Saved Successfully.");
-		},
-		});
+    // let id = id;
+    let product_name = $("#product_name1").val();
+    let price = $("#price1").val();
+    let quantity = $("#quantity1").val();
 
-		//then hide the submit button
-		document.querySelector("#update-product").style.display = "none";
-	});
+    $.ajax({
+      type: "PUT",
+      dataType: "json",
+      // headers: {'X-CSRFToken': csrftoken},
 
-	console.log("update-btn clicked");
+      data: {
+        product_name: product_name,
+        price: price,
+        quantity: quantity,
+      },
+
+      url: "http://localhost:8000/api/inventory/" + id_to_pass + "/",
+      error: function (xhr, status, error) {
+        var err_msg = "";
+        for (var prop in xhr.responseJSON) {
+          err_msg += prop + ": " + xhr.responseJSON[prop] + "\n";
+        }
+
+        alert(err_msg);
+      },
+      success: function (result) {
+        BindProducts();
+        alert("Data Saved Successfully.");
+      },
+    });
+
+    //then hide the submit button
+    document.querySelector("#update-product").style.display = "none";
+  });
+
+  console.log("update-btn clicked");
 }
 
 // function UpdateRow(id) {
@@ -223,7 +260,7 @@ function update_func(res) {
 // 	let product_name = $("#product_name1").val();
 // 	let price = $("#price1").val();
 // 	let quantity = $("#quantity1").val();
-  
+
 // 	$.ajax({
 // 	  type: "PUT",
 // 	  dataType: "json",
@@ -234,28 +271,26 @@ function update_func(res) {
 // 		price: price,
 // 		quantity: quantity,
 // 	  },
-  
+
 // 	  url: "http://localhost:8000/api/inventory/"+ id_to_pass +"/",
 // 	  error: function (xhr, status, error) {
 // 		var err_msg = "";
 // 		for (var prop in xhr.responseJSON) {
 // 		  err_msg += prop + ": " + xhr.responseJSON[prop] + "\n";
 // 		}
-  
+
 // 		alert(err_msg);
 // 	  },
 // 	  success: function (result) {
 // 		BindProducts();
 // 		alert("Data Saved Successfully.");
-  
+
 // 		$("#product_name").val("");
 // 		$("#price").val("");
 // 		$("#quantity").val("");
 // 	  },
 // 	});
 // };
-
-
 
 function delete_confirmation_func(id) {
   var result = confirm("Want to delete?");
