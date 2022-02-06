@@ -19,4 +19,5 @@ urlpatterns = [
     path('about/', views.about, name='inventory-about'),
     # path('add_new_product/', views.add_new_product, name='inventory-add'),
     path('api/', include(router.urls)),
+    path('api1/get_products', views.get_products, name='fetch-products'),
 ]

@@ -28,6 +28,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 )
 from .documents import *
 
+import json
 
 # dummy data
 # items = [
@@ -58,6 +59,23 @@ def home(request):
 
 def about(request):
     return render(request, 'inventory/about.html', {'title': 'About'})
+
+
+
+#search trial
+# from django.http import JsonResponse
+
+# def search_api(request):
+#     q = request.GET.get("q")
+#     results = []
+#     if q:
+#         results = [{
+#             "id": a.id,
+#             "title": a.title
+#         } for a in Article.objects.filter(title__icontains=q)]
+#     return JsonResponse(results)
+
+
 
 
 # def add_new_product(request):
