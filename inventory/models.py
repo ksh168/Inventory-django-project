@@ -5,8 +5,8 @@ from django.utils import timezone
 
 class Product(models.Model):
     product_name = models.CharField(max_length=100, unique=True)
-    price = models.IntegerField()
-    quantity = models.IntegerField()
+    price = models.FloatField()
+    quantity = models.PositiveIntegerField()
     date_posted = models.DateTimeField(default=timezone.now)
 
 

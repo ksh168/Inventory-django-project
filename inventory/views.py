@@ -62,6 +62,120 @@ def about(request):
 
 
 
+
+from django.views import View
+from django.http import JsonResponse
+import json
+
+
+# to bypass CSRF
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
+
+@method_decorator(csrf_exempt, name='dispatch')  # to bypass CSRF
+class ShoppingCart(View):
+        # GET method
+    def get(self, request):
+        # MAX_OBJECTS = 20
+
+        #search functionality
+        q = request.GET.get('q')
+        if q:
+            items = Product.objects.filter(product_name__icontains=q)
+            items_count = items.count()
+
+        #if q parameter not passed, return all
+        else:
+            items_count = Product.objects.count()
+            items = Product.objects.all()
+
+        items_data = []
+        for item in items:
+            items_data.append({
+                'product_name': item.product_name,
+                'price': item.price,
+                'quantity': item.quantity,
+            })
+
+        # reply = {
+        #     'count': items_count,  # total count of items in DB
+        #     'items': items_data
+        # }
+
+        # reply = items_data
+
+        # return JsonResponse(reply, safe=False)
+        # return json.dumps(reply)
+
+        context = {
+        'items': items
+        }
+        # form = add_new_product_form()
+        return render(request, 'inventory/home1.html', context)
+
+
+        
+    # POST method
+    def post(self, request):
+        # Using the json module, we've decoded and parsed the incoming request's body into an object we can work with
+        data = json.loads(request.body.decode("utf-8"))
+
+        p_name = data.get('product_name')
+        p_price = data.get('price')
+        p_quantity = data.get('quantity')
+
+        # dictionary to hold fields and their values
+        product_data = {
+            'product_name': p_name,
+            'price': p_price,
+            'quantity': p_quantity,
+        }
+
+        # persisted a Product to our database, via the create() method of the Model class, filling it with our product_data
+        cart_item = Product.objects.create(
+            **product_data)  # similar to **kwargs
+       
+        reply = {
+            "message": f"New Item: {cart_item.product_name} added to Cart with id: {cart_item.id}"
+        }
+
+        # convert Python dictionary to a valid JSON object that is sent over HTTP back to the client
+        return JsonResponse(reply, status=201)        # HTTP 201 Created success status
+
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ShoppingCartUpdate(View):
+    # PATCH method->to change one of the attributes
+    def patch(self, request, item_id):
+        data = json.loads(request.body.decode("utf-8"))
+        # get item from DB
+        item = Product.objects.get(id=item_id)
+
+        # currently allowing to change quantity only
+        item.quantity = data['quantity']
+
+        # save changes to DB
+        item.save()
+
+        reply = {
+            'message': f"Item: {item.product_name} with id {item_id} has been updated with new quantity as {item.quantity}"
+        }
+        return JsonResponse(reply)
+
+    #DELETE method
+    def delete(self, request, item_id):
+        item = Product.objects.get(id=item_id)
+        item.delete()
+
+        reply = {
+            'message': f'Item: {item.product_name} with id {item_id} has been deleted'
+        }
+
+        return JsonResponse(reply)
+
+
 #search trial
 # from django.http import JsonResponse
 

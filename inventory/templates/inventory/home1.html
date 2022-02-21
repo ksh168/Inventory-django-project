@@ -106,10 +106,9 @@
 
 	<!-- Modal Section -->
 
-	<div class="bg-modal">
+	<!-- <div class="bg-modal">
 		<div class="modal-contents">
 
-			<!-- using + instead of x to make a proper close button -->
 			<div class="close">+</div>
 
 			<form action="">
@@ -120,7 +119,7 @@
 			</form>
 
 		</div>
-	</div>
+	</div> -->
 
 
 	<main role="main" class="container">
@@ -143,7 +142,7 @@
 					<tbody>
 						{% for item in items %}
 						<tr>
-							<th scope="row" class="counterCell"></th>
+							<td>{{ item.id }}</td>
 							<td>{{ item.product_name }}</td>
 							<td>{{ item.price }}</td>
 							<td>{{ item.quantity }}</td>
@@ -163,5 +162,8 @@
 
 
 <script src="{% static 'inventory/script1.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+
 
 </html>

@@ -1,9 +1,6 @@
 from django.urls import path, include
 
-from .views import (
-    ItemListView,
-    # PublisherDocumentView
-)
+from .views import *
 
 from . import views
 
@@ -19,5 +16,9 @@ urlpatterns = [
     path('about/', views.about, name='inventory-about'),
     # path('add_new_product/', views.add_new_product, name='inventory-add'),
     path('api/', include(router.urls)),
-    path('api1/get_products', views.get_products, name='fetch-products'),
+    # path('api1/get_products', views.get_products, name='fetch-products'),
+
+
+    path('cart-items/', ShoppingCart.as_view()),
+    path('update-item/<int:item_id>', ShoppingCartUpdate.as_view()),
 ]
