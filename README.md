@@ -21,7 +21,7 @@ This is an Inventory Management System built using Django. The application allow
 
 ## Demo video
 
-<video src="inventorymanagement.mp4" controls></video>
+[Watch the demo video](inventorymanagement.mp4)
 
 ## Installation
 
