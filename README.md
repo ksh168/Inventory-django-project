@@ -10,6 +10,19 @@ This is an Inventory Management System built using Django. The application allow
 - View a list of all inventory items
 - Search for inventory items
 
+## Technologies used
+
+- Django
+- Python
+- SQLite3
+- HTML
+- CSS
+- JavaScript
+
+## Demo video
+
+<video src="inventorymanagement.mp4" controls></video>
+
 ## Installation
 
 1. Clone the repository:
